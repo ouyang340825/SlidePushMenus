@@ -1,0 +1,120 @@
+@font-face {
+	font-family: 'fontawesome';
+	src:url('../fonts/fontawesome.eot');
+	src:url('../fonts/fontawesome.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/fontawesome.svg#fontawesome') format('svg'),
+		url('../fonts/fontawesome.woff') format('woff'),
+		url('../fonts/fontawesome.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+body, html {
+	font-size: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;}
+
+/* Reset */
+*,
+*:after,
+*:before {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+/* Clearfix hack by Nicolas Gallagher: http://nicolasgallagher.com/micro-clearfix-hack/ */
+.clearfix:before,
+.clearfix:after {
+	content: " ";
+	display: table;
+}
+
+.clearfix:after {
+	clear: both;
+}
+
+body {
+    font-family: 'Lato', Calibri, Arial, sans-serif;
+    color: #47a3da;
+}
+
+.main{
+	margin: 0 auto;
+}
+
+.main > section {
+	max-width: 260px;
+	width: 90%;
+	margin: 0 auto;
+}
+
+.main > section button {
+	border: none;
+	background: #47a3da;
+	color: #fff;
+	padding: 0.05rem 0.1rem;
+	display: block;
+	cursor: pointer;
+	float:left;
+	font-size: 0.1rem;
+}
+
+.main > section button:hover {
+	background: #258ecd;
+}
+
+.main > section button.active {
+	background: #0d77b6;
+}
+
+.main > section button.disabled {
+	background: #aaa;
+	pointer-events: none;
+}
+
+.gaodemap {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	border: 1px solid #159BCD;
+}
+
+.btn-group button {
+	color: white; /* White text */
+	cursor: pointer; /* Pointer/hand icon */
+	float: left; /* Float the buttons side by side */
+}
+
+.btn-group:after {
+	content: "";
+	clear: both;
+	display: table;
+}
+
+.btn-group button:not(:last-child) {
+	border-right: 1px solid #5f81b8; /* Prevent double borders */
+}
+
+.btn-group button:first-child {
+	border-top-left-radius: 7px;
+	border-bottom-left-radius: 7px;
+}
+
+.btn-group button:last-child {
+	border-top-right-radius: 7px;
+	border-bottom-right-radius: 7px;
+}
+
+.btn-group button:hover {
+	background-color: #2c592c;
+}
+
+.btn-group button:active{
+	position: relative;
+	top: 2px;
+	box-shadow: inset 0 3px 5px 0 rgba(0,0,0,0.2);
+	outline: 0;
+}
+

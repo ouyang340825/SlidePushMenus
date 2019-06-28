@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>道路运输综合监管平台</title>
+		<link rel="stylesheet" type="text/css" href="css/default.css" />
+		<link rel="stylesheet" type="text/css" href="css/component.css" />
+		<link rel="stylesheet" type="text/css" href="css/asidenav.css" />
+		<script src="js/jquery.js"></script>
+		<script src="js/modernizr.custom.js"></script>
+		<script src="js/asidenav.js"></script>
+		<script src="https://cache.amap.com/lbs/static/es5.min.js"></script>
+		<script src="https://webapi.amap.com/maps?v=1.4.14&key=662b7a5d373bccb29453167d08245aef"></script>
+		<link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
+	</head>
+	<body class="cbp-spmenu-push">
+		<nav class="cbp-spmenu cbp-spmenu-vertical-left cbp-spmenu-left" id="cbp-spmenu-s1">
+
+		</nav>
+		<nav class="cbp-spmenu cbp-spmenu-vertical-right1 cbp-spmenu-right" id="cbp-spmenu-s2">
+			<div class="boxall" style="height: 2.2rem;margin-top: 0.15rem;">
+				<div class="box numBox">
+					<span class="name-view">在线数</span>
+					<div style="margin-left: 0.15rem;" id="clNum">
+						<div class="num-view">1</div>
+						<div class="num-view">7</div>
+						<div class="num-view">3</div>
+						<div class="num-view">8</div>
+						<div class="num-view">2</div>
+					</div>
+				</div>
+				<div class="box numBox" style="">
+					<span class="name-view">营运数</span>
+					<div style="margin-left: 0.15rem;" id="sjNum">
+						<div class="num-view">7</div>
+						<div class="num-view">1</div>
+						<div class="num-view">7</div>
+						<div class="num-view">3</div>
+						<div class="num-view">9</div>
+					</div>
+				</div>
+				<div class="box numBox" style="">
+					<span class="name-view">重车数</span>
+					<div style="margin-left: 0.15rem;" id="qyNum">
+						<div class="num-view">7</div>
+						<div class="num-view">1</div>
+						<div class="num-view">7</div>
+						<div class="num-view">3</div>
+						<div class="num-view">9</div>
+					</div>
+				</div>
+				<div class="boxfoot"></div>
+			</div>
+		</nav>
+
+		<nav class="cbp-spmenu cbp-spmenu-vertical-right2 cbp-spmenu-right" id="cbp-spmenu-s5">
+
+		</nav>
+
+		<nav class="cbp-spmenu cbp-spmenu-horizontal-top cbp-spmenu-top" id="cbp-spmenu-s3">
+
+		</nav>
+		<nav class="cbp-spmenu cbp-spmenu-horizontal-bottom cbp-spmenu-bottom" id="cbp-spmenu-s4">
+
+		</nav>
+		<div class="container">
+			<div class="main">
+				<div style=" position:absolute;z-index:9978;">
+					<svg width="0" height="0">
+						<defs>
+							<filter id="goo">
+								<feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"></feGaussianBlur>
+								<feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo"></feColorMatrix>
+								<feComposite in="SourceGraphic" in2="goo" operator="atop"></feComposite>
+							</filter>
+						</defs>
+					</svg>
+					<div class="aside-nav bounceInUp animated" id="aside-nav">
+						<label for="" id="showTop" class="aside-menu">菜单</label>
+						<a id="showLeft" href="javascript:void(0)" class="menu-item menu-line menu-first">企业<br>信息</a>
+						<a id="showBottom" href="javascript:void(0)" class="menu-item menu-line menu-second">车辆<br>信息</a>
+						<a id="showRight2" href="javascript:void(0)" class="menu-item menu-line menu-third">异常<br>信息</a>
+						<a id="showRight1" href="javascript:void(0)" class="menu-item menu-line menu-fourth">车辆<br>统计</a>
+						<a id="jhMap" href="javascript:void(0)" class="menu-item menu-line menu-fifth checked">聚合<br>地图</a>
+						<a id="rlMap" href="javascript:void(0)" class="menu-item menu-line menu-sixth">热力<br>地图</a>
+					</div>
+				</div>
+				<!--<section class="btn-group" style=" position:absolute;z-index:9998;left: 50%;top: 50%;">
+					<button >左</button>
+					<button >右1</button>
+					<button >右2</button>
+					<button >上</button>
+					<button >下</button>
+				</section>-->
+				<div id="chinaMap" class="gaodemap map" tabindex="0"></div>
+			</div>
+		</div>
+		<script src="js/classie.js"></script>
+		<script>
+            $(document).ready(function () {
+                var whei = $(window).width();
+                $("html").css({fontSize: whei / 20});
+                $(window).resize(function () {
+                    var whei = $(window).width();
+                    $("html").css({fontSize: whei / 20});
+                });
+            });
+			var menuLeft = document.getElementById( 'cbp-spmenu-s1' ),
+				menuRight1 = document.getElementById( 'cbp-spmenu-s2' ),
+                menuRight2 = document.getElementById( 'cbp-spmenu-s5' ),
+				menuTop = document.getElementById( 'cbp-spmenu-s3' ),
+				menuBottom = document.getElementById( 'cbp-spmenu-s4' ),
+				showLeft = document.getElementById( 'showLeft' ),
+				showRight1 = document.getElementById( 'showRight1' ),
+                showRight2 = document.getElementById( 'showRight2' ),
+				showTop = document.getElementById( 'showTop' ),
+				showBottom = document.getElementById( 'showBottom' ),
+                showRlMap = document.getElementById( 'rlMap' ),
+                showJhMap = document.getElementById( 'jhMap' );
+
+			showLeft.onclick = function() {
+                classie.toggle( this, 'checked' );
+				classie.toggle( menuLeft, 'cbp-spmenu-open' );
+			};
+
+			showRight1.onclick = function() {
+                classie.toggle( this, 'checked' );
+				classie.toggle( menuRight1, 'cbp-spmenu-open' );
+			};
+
+            showRight2.onclick = function() {
+                classie.toggle( this, 'checked' );
+                classie.toggle( menuRight2, 'cbp-spmenu-open' );
+            };
+
+			showTop.onclick = function() {
+				classie.toggle( this, 'checked' );
+				classie.toggle( menuTop, 'cbp-spmenu-open' );
+			};
+
+			showBottom.onclick = function() {
+				classie.toggle( this, 'checked' );
+				classie.toggle( menuBottom, 'cbp-spmenu-open' );
+			};
+
+            showRlMap.onclick = function () {
+                classie.addClass( this, 'checked' );
+                classie.removeClass( showJhMap, 'checked' );
+                cluster.clearMarkers();
+                loadRlData();
+            }
+
+            showJhMap.onclick = function () {
+                classie.addClass( this, 'checked' );
+                classie.removeClass( showRlMap, 'checked' );
+                heatmap.setMap();
+                loadJhData();
+            }
+
+            var cluster;
+            var points;
+            var map;
+            var heatmapData = [];
+            var heatmap;
+            window.onload = function () {
+                map = new AMap.Map('chinaMap', {
+                    resizeEnable: true, //是否监控地图容器尺寸变化
+                    center: [118.7864, 32.0555],
+                    zoom: 11,
+                    mapStyle: "amap://styles/normal"
+                });
+                setInterval(this.loadData, 1000 * 60 * 3);
+                loadJhData();
+            }
+
+
+            function loadRlData() {
+                $.ajax({
+                    type: "GET",
+                    url: "http://127.0.0.1:8086/DrivetTj/queryRlMapData",
+                    async: true,
+                    dataType: "json", //返回数据形式为json
+                    success: function (res) {
+                        heatmapData = res;
+                        if(heatmap){
+                            heatmap.setMap();
+						}
+                        map.plugin(["AMap.Heatmap"], function () {
+                            //初始化heatmap对象
+                            heatmap = new AMap.Heatmap(map, {
+                                radius: 25, //给定半径
+                                opacity: [0, 0.8]
+                            });
+                        });
+                        heatmap.setDataSet({
+                            data: heatmapData,
+                            max: 30
+                        });
+                    }
+                });
+            }
+
+            //加载聚合图
+            function loadJhData() {
+                $.ajax({
+                    type: "GET",
+                    url: "http://218.94.158.110:8082/DrivetTj/queryMapData",
+                    async: true,
+                    dataType: "json", //返回数据形式为json
+                    success: function (res) {
+                        points = res;
+                        refreshHeatmap(points);
+                    }
+                });
+            }
+
+            function refreshHeatmap(json) {
+                map.clearMap();
+                var markers = [];
+                var orderjson = json;
+                for (var i = 0; i < orderjson.length; i++) {
+                    var markerPosition = new AMap.LngLat(eval(orderjson[i].lon).toFixed(5), eval(orderjson[i].lat).toFixed(5));
+                    var marker = new AMap.Marker({
+                        position: markerPosition, //基点位置
+                        icon: "image/point1.png", //marker图标，直接传递地址url
+                        offset: {x: -8, y: -34} //相对于基点的位置
+                    });
+                    markers.push(marker);
+                }
+
+                if (cluster) {
+                    cluster.setMap(null);
+                }
+
+                var sts = [{
+                    url: "https://a.amap.com/jsapi_demos/static/images/blue.png",
+                    size: new AMap.Size(32, 32),
+                    offset: new AMap.Pixel(-16, -16)
+                }, {
+                    url: "https://a.amap.com/jsapi_demos/static/images/green.png",
+                    size: new AMap.Size(32, 32),
+                    offset: new AMap.Pixel(-16, -16)
+                }, {
+                    url: "https://a.amap.com/jsapi_demos/static/images/orange.png",
+                    size: new AMap.Size(36, 36),
+                    offset: new AMap.Pixel(-18, -18)
+                }, {
+                    url: "https://a.amap.com/jsapi_demos/static/images/red.png",
+                    size: new AMap.Size(48, 48),
+                    offset: new AMap.Pixel(-24, -24)
+                }, {
+                    url: "https://a.amap.com/jsapi_demos/static/images/darkRed.png",
+                    size: new AMap.Size(48, 48),
+                    offset: new AMap.Pixel(-24, -24)
+                }];
+
+
+                map.plugin(["AMap.MarkerClusterer"], function () {
+                    cluster = new AMap.MarkerClusterer(map, markers, {
+                        styles: sts,
+                        gridSize: 60
+                    });
+                });
+            }
+
+
+            function addCluster(tag) {
+                if (cluster) {
+                    cluster.setMap(null);
+                }
+                if (tag == 2) {//完全自定义
+                    map.plugin(["AMap.MarkerClusterer"], function () {
+                        cluster = new AMap.MarkerClusterer(map, markers, {
+                            gridSize: 80,
+                            renderClusterMarker: function (context) {
+                                debugger
+                                var factor = Math.pow(context.count / count, 1 / 18);
+                                var div = document.createElement('div');
+                                var Hue = 180 - factor * 180;
+                                var bgColor = 'hsla(' + Hue + ',100%,50%,0.7)';
+                                var fontColor = 'hsla(' + Hue + ',100%,20%,1)';
+                                var borderColor = 'hsla(' + Hue + ',100%,40%,1)';
+                                var shadowColor = 'hsla(' + Hue + ',100%,50%,1)';
+                                div.style.backgroundColor = bgColor;
+                                var size = Math.round(30 + Math.pow(context.count / count, 1 / 5) * 20);
+                                div.style.width = div.style.height = size + 'px';
+                                div.style.border = 'solid 1px ' + borderColor;
+                                div.style.borderRadius = size / 2 + 'px';
+                                div.style.boxShadow = '0 0 1px ' + shadowColor;
+                                div.innerHTML = context.count;
+                                div.style.lineHeight = size + 'px';
+                                div.style.color = fontColor;
+                                div.style.fontSize = '14px';
+                                div.style.textAlign = 'center';
+                                context.marker.setOffset(new AMap.Pixel(-size / 2, -size / 2));
+                                context.marker.setContent(div)
+                            }
+                        });
+
+                    })
+
+                } else if (tag == 1) {//自定义图标
+                    var sts = [{
+                        url: "https://a.amap.com/jsapi_demos/static/images/blue.png",
+                        size: new AMap.Size(32, 32),
+                        offset: new AMap.Pixel(-16, -16)
+                    }, {
+                        url: "https://a.amap.com/jsapi_demos/static/images/green.png",
+                        size: new AMap.Size(32, 32),
+                        offset: new AMap.Pixel(-16, -16)
+                    }, {
+                        url: "https://a.amap.com/jsapi_demos/static/images/orange.png",
+                        size: new AMap.Size(36, 36),
+                        offset: new AMap.Pixel(-18, -18)
+                    }, {
+                        url: "https://a.amap.com/jsapi_demos/static/images/red.png",
+                        size: new AMap.Size(48, 48),
+                        offset: new AMap.Pixel(-24, -24)
+                    }, {
+                        url: "https://a.amap.com/jsapi_demos/static/images/darkRed.png",
+                        size: new AMap.Size(48, 48),
+                        offset: new AMap.Pixel(-24, -24)
+                    }];
+
+                    map.plugin(["AMap.MarkerClusterer"], function () {
+                        cluster = new AMap.MarkerClusterer(map, markers, {
+                            styles: sts,
+                            gridSize: 80
+                        });
+                    })
+
+                } else {//默认样式
+                    map.plugin(["AMap.MarkerClusterer"], function () {
+                        cluster = new AMap.MarkerClusterer(map, markers, {gridSize: 80});
+                    })
+
+                }
+            }
+
+
+            function addCluster1() {
+                if (cluster) {
+                    cluster.setMap(null);
+                }
+                //完全自定义
+
+                map.plugin(["AMap.MarkerClusterer"], function () {
+                    cluster = new AMap.MarkerClusterer(map, markers, {
+                            gridSize: 1,
+                            size: new AMap.Size(1, 1),
+                            offset: new AMap.Pixel(-16, -16),
+                            renderClusterMarker: _renderClusterMarker
+                        }
+                    );
+                })
+
+
+            }
+		</script>
+		<style>
+
+
+			.box {
+				display: flex;
+				display: -webkit-flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.name-view {
+				float: left;
+				font-size: 0.1rem;
+				color: white;
+				text-align: center;
+				line-height: 0.4rem;
+			}
+
+			.num-view {
+				text-align: center;
+				color: #fff;
+				font-size: 0.17rem;
+				line-height: 0.3rem;
+				background: #1C5A81;
+				padding: 0 0px;
+				width: 0.3rem;
+				height: 0.3rem;
+				margin: 0 0.04rem;
+				float: left;
+				font-family: electronicFont;
+				font-weight: bold;
+			}
+
+			.numBox {
+				height: 0.45rem;
+				margin-top: 0.1rem;
+				background: #0B3861;
+				width: 100%;
+			}
+
+			.boxall{
+				padding: 0 .15rem;
+				background: rgba(255,255,255,.04) /*url(../images/line.png)*/;
+				background-size: 100% auto;
+				position: relative;
+				margin-bottom: .15rem;
+				z-index: 10;
+			}
+
+		</style>
+	</body>
+</html>
